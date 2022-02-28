@@ -1,6 +1,8 @@
 <?php
 
+use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
+use Inertia\Inertia;
 
 /*
 |--------------------------------------------------------------------------
@@ -13,6 +15,61 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
+//Route::get('/', function () {
+//    return Inertia::render('welcome', [
+//        'canLogin' => Route::has('login'),
+//        'canRegister' => Route::has('register'),
+//        'laravelVersion' => Application::VERSION,
+//        'phpVersion' => PHP_VERSION,
+//    ]);
+//});
+
+
+Route::get('/dashboard', function () {
+    return Inertia::render('Dashboard');
+})->middleware(['auth', 'verified'])->name('dashboard');
+
+//Route::get('dashboard',function (){
+//    return redirect()->route('panel');
+//})->name('dashboard');
+
+require __DIR__.'/auth.php';
+
+
+Route::group(['middleware' => ['web']], function () {
+    Route::get('/', ['as' => '.', 'uses' => 'HomeController@index']);
+
+
+    Route::get('panel', ['as' => 'panel', 'uses' => 'HomeController@panel'])
+        ->middleware(['auth', 'verified']);
+
+    Route::group(['middleware'=>['auth']], function (){
+
+        Route::group(['middleware'=>['role:Admin']], function (){
+
+            Route::post('design/storePhotos','AdminController@storePhotos');
+
+        });
+
+        Route::group(['middleware'=>['role:Designer']], function (){
+
+            Route::get('{uuid}/change-privacy','HomeController@changePrivacy')
+                ->name('{uuid}.change-privacy');
+
+            Route::get('customers', ['as' => 'customers', 'uses' => 'HomeController@customers']);
+
+            Route::post('create-customer', ['as' => 'create-customer', 'uses' => 'HomeController@createCustomer']);
+        });
+
+    });
+//    end auth
+    Route::get('{designer_id}/photos','HomeController@photos')->name('{designer_id}.photos');
+
+    Route::post('customer-login','HomeController@customerLogin');
+
+    Route::get('search', ['as' => 'search', 'uses' => 'HomeController@search']);
+
 });
+
+
+
