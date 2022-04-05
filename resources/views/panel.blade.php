@@ -163,7 +163,7 @@
                                                             <i class=" <?= $design_photo->privacy == 'private'
                                                                 ? 'fab fa-accessible-icon' : 'fa fa-universal-access' ?>
                                                                 fa-2x"    aria-hidden="true" title="<?= $design_photo->privacy == 'private' ?
-                                                            'دسترسی خصصوی' : 'دسترسی عمومی' ?>"></i></a>
+                                                            'دسترسی خصوصی' : 'دسترسی عمومی' ?>"></i></a>
                                                     </div>
                                                 </div>
                                             </div>

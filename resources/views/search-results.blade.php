@@ -217,7 +217,7 @@
                                                     <i class=" <?= $media_item->privacy == 'private'
                                                         ? 'fab fa-accessible-icon' : 'fa fa-universal-access' ?>
                                                         fa-2x"    aria-hidden="true" title="<?= $media_item->privacy == 'private' ?
-                                                        'دسترسی خصصوی' : 'دسترسی عمومی' ?>"></i>
+                                                        'دسترسی خصوصی' : 'دسترسی عمومی' ?>"></i>
                                                 </div>
                                             </div>
                                         </div>

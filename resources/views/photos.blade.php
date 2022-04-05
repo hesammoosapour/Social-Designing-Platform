@@ -60,7 +60,7 @@
                                                         <i class=" <?= $designer_photo->privacy == 'private'
                                                             ? 'fab fa-accessible-icon' : 'fa fa-universal-access' ?>
                                                             fa-2x"    aria-hidden="true" title="<?= $designer_photo->privacy == 'private' ?
-                                                            'دسترسی خصصوی' : 'دسترسی عمومی' ?>"></i>
+                                                            'دسترسی خصوصی' : 'دسترسی عمومی' ?>"></i>
                                                     </div>
                                                 </div>
                                             </div>
@@ -101,7 +101,7 @@
                                                             <i class=" <?= $designer_photo->privacy == 'private'
                                                                 ? 'fab fa-accessible-icon' : 'fa fa-universal-access' ?>
                                                                 fa-2x"    aria-hidden="true" title="<?= $designer_photo->privacy == 'private' ?
-                                                                'دسترسی خصصوی' : 'دسترسی عمومی' ?>"></i>
+                                                                'دسترسی خصوصی' : 'دسترسی عمومی' ?>"></i>
                                                         </div>
                                                     </div>
                                                 </div>
