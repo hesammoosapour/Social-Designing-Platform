@@ -14,7 +14,7 @@ class AddPrivacy extends Migration
     public function up()
     {
         Schema::table('media', function (Blueprint $table) {
-            $table->enum('privacy', ['private', 'public']);
+            $table->enum('privacy', ['private', 'public','privateOnly']);
         });
     }
 

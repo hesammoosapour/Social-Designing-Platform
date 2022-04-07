@@ -214,10 +214,11 @@
                                                         <i class="text-info fas fa-eye fa-2x" title="مشاهده عکس"></i></a>
                                                 </div>
                                                 <div class="col-2">
-                                                    <i class=" <?= $media_item->privacy == 'private'
+                                                    <i class=" <?= $media_item->privacy == 'private' || $media_item->privacy == 'privateOnly'
                                                         ? 'fab fa-accessible-icon' : 'fa fa-universal-access' ?>
-                                                        fa-2x"    aria-hidden="true" title="<?= $media_item->privacy == 'private' ?
-                                                        'دسترسی خصوصی' : 'دسترسی عمومی' ?>"></i>
+                                                        fa-2x"    aria-hidden="true"
+                                                       title="<?= $media_item->privacy == 'private'  || $media_item->privacy == 'privateOnly'
+                                                           ? 'دسترسی خصوصی' : 'دسترسی عمومی' ?>"></i>
                                                 </div>
                                             </div>
                                         </div>

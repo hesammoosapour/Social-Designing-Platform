@@ -54,9 +54,13 @@ class HomeController extends Controller
         if (isset($privacy) && $privacy->privacy == 'private' ) {
             DB::table('media')->where(['uuid'=> $uuid_design])->update(['privacy'=> 'public']);
         }
-        else
+        elseif(isset($privacy) && $privacy->privacy == 'public' )
         {
             DB::table('media')->where(['uuid'=> $uuid_design])->update(['privacy'=> 'private']);
+        }
+        else {
+            Session::flash('private_only', '.این طراحی صرفا دسترسی خصوصی دارد');
+            return back();
         }
         return back();
     }

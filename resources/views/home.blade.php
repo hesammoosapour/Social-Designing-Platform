@@ -184,10 +184,12 @@
                                                 <i class="text-info fas fa-eye fa-2x" title="مشاهده عکس"></i></a>
                                         </div>
                                         <div class="col-2">
-                                            <i class=" <?= $designer_photo->privacy == 'private'
+{{--                                            todo : redundant here ,all pics here are private--}}
+                                            <i class=" <?= $designer_photo->privacy == 'private' || $designer_photo->privacy == 'privateOnly'
                                                 ? 'fab fa-accessible-icon' : 'fa fa-universal-access' ?>
-                                                fa-2x"    aria-hidden="true" title="<?= $designer_photo->privacy == 'private' ?
-                                                'دسترسی خصوصی' : 'دسترسی عمومی' ?>"></i>
+                                                fa-2x"    aria-hidden="true"
+                                               title="<?= $designer_photo->privacy == 'private' || $designer_photo->privacy == 'privateOnly'
+                                                   ? 'دسترسی خصوصی' : 'دسترسی عمومی' ?>"></i>
                                         </div>
                                     </div>
                                 </div>

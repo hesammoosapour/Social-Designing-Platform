@@ -11,7 +11,7 @@ class Media extends Model
     use HasFactory,softDeletes;
     protected $dates = ['deleted_at'];
 
-//    protected $fillable=['']
+    protected $fillable = ['privacy'];
 
     public function modelable()
     {

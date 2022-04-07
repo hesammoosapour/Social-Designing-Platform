@@ -47,16 +47,15 @@ class User extends Authenticatable implements HasMedia
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
-    public function registerMediaCollections(): void
+    public function  registerMediaCollections(): void
     {
         $this->addMediaCollection('Design')
-            ->onlyKeepLatest(100)
-            ->acceptsMimeTypes(['image/jpg','image/gif','image/png','image/jpeg','image/bmp','image/tiff','image/webp'])
+            ->acceptsMimeTypes(['image/jpg', 'image/gif', 'image/png', 'image/jpeg', 'image/bmp', 'image/tiff', 'image/webp'])
             ->withResponsiveImages()
             ->registerMediaConversions(function (Media $media) {
                 $this->addMediaConversion('thumb')
-                    ->width(50)->height(50);
-
+                    ->width(50)
+                    ->height(50);
                 $this->addMediaConversion('card')
                     ->width(368)
                     ->height(232)

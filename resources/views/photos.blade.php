@@ -42,25 +42,28 @@
                     <div class="tab-content" id="pills-tabContent">
                         <div class="tab-pane fade show active" id="pills-public" role="tabpanel" aria-labelledby="pills-public-tab">
                             {{--عمومی--}}
-                            <div class="row ">
-                                <div class=" d-flex   ">
+                            <div class="container mt-5 mb-3 ">
+                                <div class="row justify-content-start">
                                     @forelse($designer_photos as $designer_photo)
                                         @php
                                             $privacy = DB::table('media')->where('uuid',$designer_photo->uuid)->first('privacy')->privacy ;
                                         @endphp
                                         @if($privacy == 'public')
-                                            <div class="card " >
-                                                <img src="{{$designer_photo->getUrl('card')}}" class="img-fluid card_2_row" alt="">
-                                                <div class="card-body row">
-                                                    <div class="col-10">
-                                                        <a href="{{$designer_photo->getUrl()}}">
-                                                            <i class="text-info fas fa-eye fa-2x" title="مشاهده عکس"></i></a>
-                                                    </div>
-                                                    <div class="col-2">
-                                                        <i class=" <?= $designer_photo->privacy == 'private'
-                                                            ? 'fab fa-accessible-icon' : 'fa fa-universal-access' ?>
-                                                            fa-2x"    aria-hidden="true" title="<?= $designer_photo->privacy == 'private' ?
-                                                            'دسترسی خصوصی' : 'دسترسی عمومی' ?>"></i>
+                                            <div class="col-sm-12 col-md-6 col-lg-4">
+                                                <div class="card p-3 mb-2">
+                                                    <img src="{{$designer_photo->getUrl('card')}}" class="img-fluid card_2_row" alt="">
+                                                    <div class="card-body row">
+                                                        <div class="col-10">
+                                                            <a href="{{$designer_photo->getUrl()}}">
+                                                                <i class="text-info fas fa-eye fa-2x" title="مشاهده عکس"></i></a>
+                                                        </div>
+                                                        <div class="col-2">
+                                                            <i class=" <?= $designer_photo->privacy == 'private' || $designer_photo->privacy == 'privateOnly'
+                                                                ? 'fab fa-accessible-icon' : 'fa fa-universal-access' ?>
+                                                                fa-2x"    aria-hidden="true"
+                                                               title="<?= $designer_photo->privacy == 'private' || $designer_photo->privacy == 'privateOnly'
+                                                                   ? 'دسترسی خصوصی' : 'دسترسی عمومی' ?>"></i>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
@@ -75,8 +78,8 @@
                         </div>
                         <div class="tab-pane fade" id="pills-private" role="tabpanel" aria-labelledby="pills-private-tab">
                             {{--خصوصی--}}
-                            <div class="row ">
-                                <div class=" d-flex   ">
+                            <div class="container mt-5 mb-3 ">
+                                <div class="row justify-content-start">
                                     <?php
                                     $session_customer = \Illuminate\Support\Facades\Session::get('customer-designer-'.$designer->id);
                                     ?>
@@ -89,19 +92,22 @@
                                             @php
                                                 $privacy = DB::table('media')->where('uuid',$designer_photo->uuid)->first('privacy')->privacy ;
                                             @endphp
-                                            @if($privacy == 'private')
-                                                <div class="card " >
-                                                    <img src="{{$designer_photo->getUrl('card')}}" class="img-fluid card_2_row" alt="">
-                                                    <div class="card-body row">
-                                                        <div class="col-10">
-                                                            <a href="{{$designer_photo->getUrl()}}">
-                                                                <i class="text-info fas fa-eye fa-2x" title="مشاهده عکس"></i></a>
-                                                        </div>
-                                                        <div class="col-2">
-                                                            <i class=" <?= $designer_photo->privacy == 'private'
-                                                                ? 'fab fa-accessible-icon' : 'fa fa-universal-access' ?>
-                                                                fa-2x"    aria-hidden="true" title="<?= $designer_photo->privacy == 'private' ?
-                                                                'دسترسی خصوصی' : 'دسترسی عمومی' ?>"></i>
+                                            @if($privacy == 'private' || $privacy == 'privateOnly')
+                                                <div class="col-sm-12 col-md-6 col-lg-4">
+                                                    <div class="card p-3 mb-2">
+                                                        <img src="{{$designer_photo->getUrl('card')}}" class="img-fluid card_2_row" alt="">
+                                                        <div class="card-body row">
+                                                            <div class="col-10">
+                                                                <a href="{{$designer_photo->getUrl()}}">
+                                                                    <i class="text-info fas fa-eye fa-2x" title="مشاهده عکس"></i></a>
+                                                            </div>
+                                                            <div class="col-2">
+                                                                <i class=" <?= $designer_photo->privacy == 'private' || $designer_photo->privacy == 'privateOnly'
+                                                                    ? 'fab fa-accessible-icon' : 'fa fa-universal-access' ?>
+                                                                    fa-2x"    aria-hidden="true"
+                                                                   title="<?= $designer_photo->privacy == 'private' || $designer_photo->privacy == 'privateOnly'
+                                                                       ? 'دسترسی خصوصی' : 'دسترسی عمومی' ?>"></i>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>

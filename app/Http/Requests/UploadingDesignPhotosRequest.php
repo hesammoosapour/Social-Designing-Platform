@@ -25,7 +25,8 @@ class UploadingDesignPhotosRequest extends FormRequest
     {
         return [
             'designer_id' =>  'required','min:1','integer','numeric',
-            'tag_id'=>'integer','numeric','min:1'
+            'tag_id'=>'integer','numeric', 'min:1',
+            'set_private_only'=>'nullable','string','max:15'
         ];
     }
 }
