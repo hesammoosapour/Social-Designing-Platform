@@ -27,7 +27,7 @@ class HomeController extends Controller
             return $q->whereNotNull('deleted_at')
                 ->orWhereNotNull('post_id');
         })
-            ->get(['file_name','post_id','id','model_id','created_at'])->groupBy('post_id');
+            ->get(['file_name','post_id','id','created_at','model_id'])->groupBy('post_id');
 //todo wherePrivacy('public')
 
 //        return $posts_medias;
