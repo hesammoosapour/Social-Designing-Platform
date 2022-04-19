@@ -10,7 +10,9 @@
 
     <x-slot name="header">
         <div class="row">
-            <a class="btn btn-primary col-2" href="{{route('customers')}}">مشتریان</a>
+            @auth
+                <a class="btn btn-primary col-2" href="{{route('customers')}}">مشتریان</a>
+            @endauth
             <h2 class="font-semibold text-xl text-gray-800 leading-tight col-10" style="direction: rtl">
                 {{ __('صفحه طراح').' '.($designer->name)." : " }}
             </h2>

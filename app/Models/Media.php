@@ -11,11 +11,11 @@ class Media extends Model
     use HasFactory,softDeletes;
     protected $dates = ['deleted_at'];
 
-    protected $fillable = ['privacy'];
+    protected $fillable = ['privacy','post_id'];
 
     public function modelable()
     {
-        return $this->morphTo();
+        return $this->morphTo('user');
     }
 
 //    public function user()

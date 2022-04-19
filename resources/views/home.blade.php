@@ -87,6 +87,8 @@
             color: #a5aec0
         }
     </style>
+
+{{--    <link rel="stylesheet" href="{{asset('css/carousel-styles.css')}}">--}}
     @yield('styles')
 </head>
 <body class="antialiased">
@@ -136,75 +138,115 @@
 
 
 @section('home-content')
-<div class="container mt-5 mb-3 " style="direction: rtl">
+    <div class="container mt-5 mb-3 " style="direction: rtl">
 
-    <div class="row justify-content-start">
-        @foreach($designers as $designer)
-            @foreach($designer->getMedia('Design') as $designer_photo)
-                @php
-                    $privacy = DB::table('media')->where('uuid',$designer_photo->uuid)->first('privacy')->privacy ;
-                @endphp
-                @if($privacy == 'public')
-                    <div class="col-sm-12 col-md-6 col-lg-4">
-                        <div class="card p-3 mb-2">
-                            <div class="d-flex justify-content-between">
-                                <div class="d-flex flex-row align-items-center">
-                                    <div class="icon"> <i class="bx bxl-mailchimp"></i> </div>
-                                    <div class="ms-2 c-details">
-                                        <h6 class="mb-0">{{$designer->name}}</h6>
-                                        <span>{{$designer_photo->created_at}}</span>
-                                    </div>
-                                </div>
-                                <div class="badge"> <span>طراحی</span> </div>
-                            </div>
-                            <div class="mt-5">
-                                <h3 class="heading text-center">
-                                    <img src="{{$designer_photo->getUrl('card')}}" style="height: 250px;width: 250px"
-                                         class="img-fluid card_2_row" alt="" >
-                                </h3>
-                                <div class="mt-5">
-                                    {{--                        <div class="progress">--}}
-                                    {{--                            <div class="progress-bar" role="progressbar" style="width: 50%" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>--}}
-                                    {{--                        </div>--}}
-                                    <div class="row mt-3 ">
-                                        <span class="text1 text-end">برچسب ها :
-                                            <span class="text2">
-                                                 @php
-                                                     $photos_tags = \App\Models\MediaTag::whereMedia_id($designer_photo->id)->get();
-                                                     foreach ($photos_tags as $key => $photo_tag) {
-                                                         echo $photo_tag->tag->name;
-                                                         if($key < count($photos_tags)-1)
-                                                             echo '،';
-                                                     }
-                                                 @endphp
-                                            </span>
-                                        </span>
-                                        <div class="col-10">
-                                            <a href="{{$designer_photo->getUrl()}}">
-                                                <i class="text-info fas fa-eye fa-2x" title="مشاهده عکس"></i></a>
+        <div class="row justify-content-start">
+            {{--        @foreach($designers as $designer)--}}
+            {{--            @foreach($designer->getMedia('Design') as $designer_photo)--}}
+            {{--                @php--}}
+            {{--                    $privacy = DB::table('media')->where('uuid',$designer_photo->uuid)->first('privacy')->privacy ;--}}
+            {{--                @endphp--}}
+            {{--                @if($privacy == 'public')--}}
+            {{--                    <div class="col-sm-12 col-md-6 col-lg-4">--}}
+            {{--                        <div class="card p-3 mb-2">--}}
+            {{--                            <div class="d-flex justify-content-between">--}}
+            {{--                                <div class="d-flex flex-row align-items-center">--}}
+            {{--                                    <div class="icon"> <i class="bx bxl-mailchimp"></i> </div>--}}
+            {{--                                    <div class="ms-2 c-details">--}}
+            {{--                                        <h6 class="mb-0">--}}
+            {{--                                            <a href="{{route('{designer_id}.photos',$designer->id)}}"--}}
+            {{--                                               class="link-dark"> {{$designer->name}}</a>--}}
+            {{--                                        </h6>--}}
+            {{--                                        <span>{{$designer_photo->created_at}}</span>--}}
+            {{--                                    </div>--}}
+            {{--                                </div>--}}
+            {{--                                <div class="badge"> <span>طراحی</span> </div>--}}
+            {{--                            </div>--}}
+            {{--                            <div class="mt-5">--}}
+            {{--                                <h3 class="heading text-center">--}}
+            {{--                                    <img src="{{$designer_photo->getUrl('card')}}" style="height: 250px;width: 250px"--}}
+            {{--                                         class="img-fluid card_2_row" alt="" >--}}
+            {{--                                </h3>--}}
+            {{--                                <div class="mt-5">--}}
+            {{--                                    --}}{{--                        <div class="progress">--}}
+            {{--                                    --}}{{--                            <div class="progress-bar" role="progressbar" style="width: 50%" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>--}}
+            {{--                                    --}}{{--                        </div>--}}
+            {{--                                    <div class="row mt-3 ">--}}
+            {{--                                        <span class="text1 text-end">برچسب ها :--}}
+            {{--                                            <span class="text2">--}}
+            {{--                                                 @php--}}
+            {{--                                                     $photos_tags = \App\Models\MediaTag::whereMedia_id($designer_photo->id)->get();--}}
+            {{--                                                     foreach ($photos_tags as $key => $photo_tag) {--}}
+            {{--                                                         echo $photo_tag->tag->name;--}}
+            {{--                                                         if($key < count($photos_tags)-1)--}}
+            {{--                                                             echo '،';--}}
+            {{--                                                     }--}}
+            {{--                                                 @endphp--}}
+            {{--                                            </span>--}}
+            {{--                                        </span>--}}
+            {{--                                        <div class="col-10">--}}
+            {{--                                            <a href="{{$designer_photo->getUrl()}}">--}}
+            {{--                                                <i class="text-info fas fa-eye fa-2x" title="مشاهده عکس"></i></a>--}}
+            {{--                                        </div>--}}
+            {{--                                        <div class="col-2">--}}
+            {{--                                            todo : redundant here ,all pics here are private--}}
+            {{--                                            <i class=" <?= $designer_photo->privacy == 'private' || $designer_photo->privacy == 'privateOnly'--}}
+            {{--                                                ? 'fab fa-accessible-icon' : 'fa fa-universal-access' ?>--}}
+            {{--                                                fa-2x"    aria-hidden="true"--}}
+            {{--                                               title="<?= $designer_photo->privacy == 'private' || $designer_photo->privacy == 'privateOnly'--}}
+            {{--                                                   ? 'دسترسی خصوصی' : 'دسترسی عمومی' ?>"></i>--}}
+            {{--                                        </div>--}}
+            {{--                                    </div>--}}
+            {{--                                </div>--}}
+            {{--                            </div>--}}
+            {{--                        </div>--}}
+            {{--                    </div>--}}
+            {{--                @endif--}}
+
+            {{--            @endforeach--}}
+            {{--        @endforeach--}}
+
+            @foreach($posts_medias as $key_post => $post)
+                <div class="pt-2 pb-1"  style="background-color: #f0f1ff">
+                    <div class="container text-center my-3">
+                        <h2 class="font-weight-light">Bootstrap Multi Slide Carousel</h2>
+                        <div class="row mx-auto my-auto justify-content-center">
+                            <div id="recipeCarousel-{{$key_post}}" class="carousel slide" data-bs-interval="false" data-bs-ride="carousel">
+                                <div class="carousel-inner" role="listbox">
+                                    @foreach($post as $key_media => $media)
+                                        <div class="carousel-item @if($key_media == 0 ) active @endif ">
+                                            <div class=" px-2">
+                                                <div class="card" style="background-color: gray;">
+                                                    <div class="card-img">
+                                                        <img src="{{env('APP_URL').'/storage/'.$media->id.'/'
+                                                        .$media->file_name}}"
+                                                             class=" img-fluid" style="max-height:500px;">
+                                                    </div>
+                                                    <div class="card-img-overlay"></div>
+                                                </div>
+                                            </div>
                                         </div>
-                                        <div class="col-2">
-{{--                                            todo : redundant here ,all pics here are private--}}
-                                            <i class=" <?= $designer_photo->privacy == 'private' || $designer_photo->privacy == 'privateOnly'
-                                                ? 'fab fa-accessible-icon' : 'fa fa-universal-access' ?>
-                                                fa-2x"    aria-hidden="true"
-                                               title="<?= $designer_photo->privacy == 'private' || $designer_photo->privacy == 'privateOnly'
-                                                   ? 'دسترسی خصوصی' : 'دسترسی عمومی' ?>"></i>
-                                        </div>
-                                    </div>
+                                    @endforeach
                                 </div>
+                                <a class="carousel-control-prev bg-transparent w-aut" href="#recipeCarousel-{{$key_post}}" role="button" data-bs-slide="prev">
+                                    <span class="bg-dark carousel-control-prev-icon" aria-hidden="true"></span>
+                                </a>
+                                <a class="carousel-control-next bg-transparent w-aut" href="#recipeCarousel-{{$key_post}}" role="button" data-bs-slide="next">
+                                    <span class="bg-dark carousel-control-next-icon" aria-hidden="true"></span>
+                                </a>
                             </div>
                         </div>
                     </div>
-                @endif
+                </div>
 
             @endforeach
-        @endforeach
 
+        </div>
     </div>
-</div>
 @endsection
 @yield('home-content')
+
+{{--<script src="{{asset('js/scripts.js')}}"></script>--}}
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
 
@@ -214,5 +256,23 @@
 <script type="text/javascript" scr="{{asset('js/bootstrap.min.js')}}"></script>
 
 
+<script>
+    let items = document.querySelectorAll('.carousel .carousel-item')
+
+    items.forEach((el) => {
+        const minPerSlide = 1
+        let next = el.nextElementSibling
+        for (var i=1; i<minPerSlide; i++) {
+            if (!next) {
+                // wrap carousel by using first child
+                next = items[0]
+            }
+            let cloneChild = next.cloneNode(true)
+            el.appendChild(cloneChild.children[0])
+            next = next.nextElementSibling
+        }
+    })
+
+</script>
 </body>
 </html>

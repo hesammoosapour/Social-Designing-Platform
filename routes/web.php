@@ -47,11 +47,19 @@ Route::group(['middleware' => ['web']], function () {
 
         Route::group(['middleware'=>['role:Admin']], function (){
 
-            Route::post('design/storePhotos','AdminController@storePhotos');
+//            Route::post('design/newPost','AdminController@newPost');
+
+            Route::get('create-post', ['as' => 'create-post', 'uses' => 'AdminController@createPost']);
+
+            Route::get('post/{id}/new', ['as' => 'post.{id}.new',
+                'uses' => 'AdminController@newPost']);
+            Route::post('post/{id}/new', ['as' => 'post.{id}.new',
+                'uses' => 'AdminController@storePost']);
+
 
         });
 
-        Route::group(['middleware'=>['role:Designer']], function (){
+        Route::group(['middleware'=>['role:Designer|Admin']], function (){
 
             Route::get('{uuid}/change-privacy','HomeController@changePrivacy')
                 ->name('{uuid}.change-privacy');

@@ -39,10 +39,12 @@
                     </div>
                     <div class="border border-1 w-50"></div>
                     @forelse($customers as $customer)
-                        <div class="row">
-                            <h5 class="col-3">{{$customer->username}}</h5>
-                            <h5 class="col-3">{{$customer->password}}</h5>
-                        </div>
+                        @if($user->hasRole("Admin") || $customer->designer_id == $user->id)
+                            <div class="row">
+                                <h5 class="col-3">{{$customer->username}}</h5>
+                                <h5 class="col-3">{{$customer->password}}</h5>
+                            </div>
+                        @endif
                     @empty
                         <h5 class="text-center " style="background-color: #bbbfbb">
                             شما  در حال حاضر هیچ مشتری ندارید!

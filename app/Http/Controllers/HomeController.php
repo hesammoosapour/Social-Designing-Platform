@@ -6,6 +6,7 @@ use App\Http\Requests\CreateCustomerRequest;
 use App\Http\Requests\CustomerLoginRequest;
 use App\Http\Requests\SearchRequest;
 use App\Models\Customer;
+use App\Models\Media;
 use App\Models\Tag;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -20,8 +21,17 @@ class HomeController extends Controller
     public function index()
     {
         $designers = User::role('Designer')->get();
+ // گرفتن تمامی عکس های پست ها
+        // جایی که هر دو ستون deleted_at , post_id نباید null باشند.
+        $posts_medias = Media::where(function ($q) {
+            return $q->whereNotNull('deleted_at')
+                ->orWhereNotNull('post_id');
+        })
+            ->get(['file_name','post_id','id','model_id','created_at'])->groupBy('post_id');
+//todo wherePrivacy('public')
 
-        return view('home',compact('designers'));
+//        return $posts_medias;
+        return view('home',compact('designers','posts_medias'));
     }
 
     public function panel()
@@ -43,25 +53,28 @@ class HomeController extends Controller
         $uuid_design = Str::after(url()->current(), env('APP_URL') . '/');
         $uuid_design = Str::before($uuid_design, '/change-privacy');
 
-        $design = DB::table('media')->where(['uuid'=> $uuid_design]);
-        if ($design->first() === null) {
+        $design = DB::table('media')->where(['uuid'=> $uuid_design])->first('privacy');
+        if ($design === null) {
             return back()->withErrors('عکس پیدا نشد!');
         }
 //        return $design->first('privacy');
 //
 
-        $privacy = $design->where('privacy', '=', 'private')->first('privacy');
-        if (isset($privacy) && $privacy->privacy == 'private' ) {
-            DB::table('media')->where(['uuid'=> $uuid_design])->update(['privacy'=> 'public']);
+//        $privacy = $design->first('privacy');
+
+        if (isset($design)) {
+            if ($design->privacy == 'private' ) {
+                DB::table('media')->where(['uuid'=> $uuid_design])->update(['privacy'=> 'public']);
+            }
+            elseif($design->privacy == 'public' ) {
+                DB::table('media')->where(['uuid'=> $uuid_design])->update(['privacy'=> 'private']);
+            }
+            else {
+                Session::flash('private_only', '.این طراحی صرفا دسترسی خصوصی دارد');
+                return back();
+            }
         }
-        elseif(isset($privacy) && $privacy->privacy == 'public' )
-        {
-            DB::table('media')->where(['uuid'=> $uuid_design])->update(['privacy'=> 'private']);
-        }
-        else {
-            Session::flash('private_only', '.این طراحی صرفا دسترسی خصوصی دارد');
-            return back();
-        }
+
         return back();
     }
 
@@ -102,7 +115,7 @@ class HomeController extends Controller
         $designer_id = $request->designerID;
 
         $customer_login = Customer::whereUsername($request->username)->wherePassword($request->password)
-            ->whereDesigner_id($designer_id)->first();
+            ->where('designer_id',$designer_id)->first();
 
         if (isset($customer_login)) {
             $request->session()->put('customer-designer-'.$designer_id,$customer_login->username);
@@ -111,7 +124,6 @@ class HomeController extends Controller
             Session::flash('invalid-credentials');
             return back();
         }
-
     }
 
     public function search(SearchRequest $request)

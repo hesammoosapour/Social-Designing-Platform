@@ -85,42 +85,7 @@
                 <div class="p-6 bg-white border-b border-gray-200">
 
                     @role('Admin')
-                    <div class="container">
-                        <h5>حداکثر تعداد آپلود: 100</h5>
-                        <form action="design/storePhotos" method="post" class="dropzone"
-                              multiple="multiple" enctype="multipart/form-data">
-                            @csrf
-                            <div class="row">
-                                <div class="d-flex form-group col-5 offset-4 ">
-                                    <label class="col-3" for="designer_id">طراح ها:</label>
-                                    <select class="form-control col-9" id="designer_id" name="designer_id"
-                                            aria-label="designer_id">
-                                        <option value="">انتخاب کنید :</option>
-                                        @foreach($designers as $designer)
-                                            <option value="{{$designer->id}}"> {{$designer->name}} </option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                                <div class="col-3">
-                                    <input class="form-check-input" name="set_private_only" type="checkbox" value="private-only" id="set-private-only">
-                                    <label class="form-check-label" for="set-private-only">فقط خصوصی باشد</label>
-                                </div>
-                            </div>
-                            <div class="form-group ">
-                                <div class="d-flex">
-                                    <h5>{!! Form::label('tag',' برچسب :') !!}</h5>
-                                    <p>با ویرگول تگ ها را از یکدیگر جدا کنید!</p>
-                                </div>
-                                {!! Form::text('tag',null,['class'=>'form-control']) !!}
-                            </div>
-                            <p>روی جعبه کلیک کنید برای اضافه کردن عکس ها :</p>
-                            {{--                            <input type="file" name="file">--}}
-                            {{--                            <div class="form-group">--}}
-                            {{--                                {!! Form::submit('Create Post',['class'=>'btn btn-primary']) !!}--}}
-                            {{--                            </div>--}}
-                        </form>
-                        <hr>
-                    </div>
+                    <a href="{{route('create-post')}}" type="button" class="btn btn-primary">پست جدید</a>
                     @endrole
 
                     @role('Designer')
