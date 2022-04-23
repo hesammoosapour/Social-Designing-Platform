@@ -139,7 +139,7 @@
                                                     </span>
                                                     <div class="col-10">
                                                         <a href="{{$design_photo->getUrl()}}">
-                                                            <i class="text-info fas fa-eye fa-2x" title="مشاهده عکس"></i></a>
+                                                            <i class="text-info fas fa-eye fa-2x" title="مشاهده پست"></i></a>
                                                     </div>
                                                     <div class="col-2">
                                                         <a href="{{route('{uuid}.change-privacy',$design_photo->uuid)}}">

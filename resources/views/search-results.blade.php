@@ -211,7 +211,7 @@
                                                 </span>
                                                 <div class="col-10">
                                                     <a href="{{'storage/'.$media_item->order_column.'/'.$media_item->file_name}}">
-                                                        <i class="text-info fas fa-eye fa-2x" title="مشاهده عکس"></i></a>
+                                                        <i class="text-info fas fa-eye fa-2x" title="مشاهده پست"></i></a>
                                                 </div>
                                                 <div class="col-2">
                                                     <i class=" <?= $media_item->privacy == 'private' || $media_item->privacy == 'privateOnly'

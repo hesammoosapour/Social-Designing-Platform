@@ -141,7 +141,7 @@
     <div class="container mt-5 mb-3 " style="direction: rtl">
 
         <div class="row justify-content-start">
-            @foreach($posts_medias as $key_post => $post)
+            @foreach($posts_medias as $key_post => $post_media)
 
                 <div class="card p-3 mb-2">
                     <div class="d-flex justify-content-between">
@@ -149,10 +149,10 @@
                             <div class="icon"> <i class="bx bxl-mailchimp"></i> </div>
                             <div class="ms-2 c-details">
                                 <h6 class="mb-0">
-                                    <a href="{{route('{designer_id}.photos',$post[0]->model_id)}}"
-                                       class="link-dark"> {{\App\Models\User::find($post[0]->model_id)->name}}</a>
+                                    <a href="{{route('{designer_id}.photos',$post_media[0]->model_id)}}"
+                                       class="link-dark"> {{\App\Models\User::find($post_media[0]->model_id)->name}}</a>
                                 </h6>
-                                <span>{{$post[0]->created_at}}</span>
+                                <span>{{$post_media[0]->created_at}}</span>
                                 {{--                                todo get from post table--}}
                             </div>
                         </div>
@@ -165,18 +165,21 @@
                                     <div class="row mx-auto my-auto justify-content-center">
                                         <div id="recipeCarousel-{{$key_post}}" class="carousel slide" data-bs-interval="false" data-bs-ride="carousel">
                                             <div class="carousel-inner" role="listbox">
-                                                @foreach($post as $key_media => $media)
+                                                @foreach($post_media as $key_media => $media)
+
                                                     <div class="carousel-item @if($key_media == 0 ) active @endif ">
                                                         <div class=" px-2">
                                                             <div class="card" style="background-color: gray;">
                                                                 <div class="card-img">
                                                                     <img src="{{env('APP_URL').'/storage/'.$media->id.'/'.$media->file_name}}"
-                                                                         class=" img-fluid" style="max-height:500px;">
+                                                                         class=" img-fluid" style="height:500px;">
                                                                 </div>
-                                                                <div style="position:fixed" class="card-img-overlay">{{$key_media}}</div>
+                                                                <div  class="card-img-overlay"></div>
                                                             </div>
                                                         </div>
                                                     </div>
+
+                                                    {{--                                                 {{$key_media}}   style="position:fixed"--}}
                                                 @endforeach
                                             </div>
                                             <a class="carousel-control-prev bg-transparent w-aut" href="#recipeCarousel-{{$key_post}}" role="button" data-bs-slide="prev">
@@ -198,7 +201,7 @@
                                 <span class="text1 text-end">برچسب ها :
                                     <span class="text2">
                                          @php
-                                             $post_media_ids = \App\Models\Media::wherePost_id($post[0]->post_id)->pluck('id');
+                                             $post_media_ids = \App\Models\Media::wherePost_id($post_media[0]->post_id)->pluck('id');
                                              $photos_tags = \App\Models\MediaTag::whereIn('media_id',$post_media_ids)->get();
 
                                                  foreach ($photos_tags as $key => $photo_tag) {
@@ -210,15 +213,82 @@
                                          @endphp
                                     </span>
                                 </span>
-                                <div class="col-10">
-                                    <a href="post_url">
-                                        <i class="text-info fas fa-eye fa-2x" title="مشاهده عکس"></i></a>
-                                </div>
-                                <div class="col-2">
-                                    <i class="fa fa-universal-access fa-2x"
-                                       aria-hidden="true" title="دسترسی عمومی"></i>
+                                <div class="row ">
+                                    <div class="col-6">
+                                        <a href="post_url">
+                                            <i class="text-info fas fa-eye fa-2x" title="مشاهده پست"></i></a>
+                                    </div>
+                                    <div class="col-1 offset-1 text-center my-1">
+                                        <i class="fa fa-universal-access fa-2x"
+                                           aria-hidden="true" title="دسترسی عمومی"></i>
+                                    </div>
+                                    <div class="col-1 offset-1 text-center my-1">
+                                        <a href="post_url">
+                                            <i class="far fa-comment fa-2x" aria-hidden="true" title="یادداشت ها"></i>
+                                        </a>
+                                    </div>
+                                    <div class="col-1 offset-1 text-center">
+                                        <?php
+                                        $like_of_post = $post_media[0]->post->likes->where('user_id', $user->id)
+                                            ->where('model_type', 'App\Models\Post')->where('model_id', $post_media[0]->post_id)->first();
+
+                                        if ($like_of_post) $like_of_post = true; else $like_of_post = false;
+                                        ?>
+                                        {!! Form::open(['method'=>'POST','action'=>'DesignerController@likeThePost']) !!}
+                                        <input type="hidden" name="post_id" value="{{$post_media[0]->post_id}}">
+                                        <button  type="submit" class=" btn " value="">
+                                            <i class="<?= $like_of_post ? 'fa' : 'far'; ?>  fa-heart fa-2x" title="لایک"
+                                               aria-hidden="true" <?= $like_of_post ? 'style="color:red" ' : '' ?>></i>
+                                        </button>
+                                        {!! Form::close() !!}
+                                    </div>
                                 </div>
                             </div>
+                        </div>
+                        <div class="caption">
+                            <div class="d-flex">
+                                @if(isset($post_media[0]->post->caption))
+                                    <h5><strong>{{\App\Models\User::find($post_media[0]->model_id)->name}}:</strong></h5>
+                                    <p>{{$post_media[0]->post->caption}}</p>
+                                @endif
+                            </div>
+                        </div>
+                        <div class="cherry-pick-comments">
+                            <?php $comments =  $post_media[0]->post->comments ?>
+                            @if(isset( $comments[0] ))
+                                    <a href="post_url">
+                                        <h5 class="text-black-50">
+                                        نمایش همه  {{count($post_media[0]->post->comments)}} یادداشت ها :
+                                        </h5>
+                                    </a>
+                                    @foreach($comments as $key_comment => $comment)
+                                        <div class="d-flex">
+                                            <h5><strong>{{$comment->user->name}}: </strong></h5>
+                                            <p>{{$comment->body}}</p>
+                                        </div>
+                                        @php if($key_comment == 1) break; @endphp
+                                    @endforeach
+                            @endif
+
+                        </div>
+                        <div class="post-comment">
+
+                            {!! Form::open(['method'=>'POST', 'action'=> 'CommentsController@store']) !!}
+
+                            <input type="hidden" name="post_id" value="{{$post_media[0]->post_id}}">
+
+                            <hr>
+                            <div class="row">
+                                <div class="form-group col-10">
+                                    {!! Form::textarea('body', null, ['class'=>'form-control border-0',
+                                    'rows'=>2, 'placeholder'=>'یادداشت بگذارید...','style'=>'resize:none;'])!!}
+                                </div>
+                                <div class="form-group col-2">
+                                    {!! Form::submit('ارسال', ['class'=>'btn link-primary']) !!}
+                                </div>
+                            </div>
+                            {!! Form::close() !!}
+
                         </div>
                     </div>
                 </div>

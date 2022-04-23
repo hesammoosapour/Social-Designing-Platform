@@ -57,7 +57,7 @@
                                                     <div class="card-body row">
                                                         <div class="col-10">
                                                             <a href="{{$designer_photo->getUrl()}}">
-                                                                <i class="text-info fas fa-eye fa-2x" title="مشاهده عکس"></i></a>
+                                                                <i class="text-info fas fa-eye fa-2x" title="مشاهده پست"></i></a>
                                                         </div>
                                                         <div class="col-2">
                                                             <i class=" <?= $designer_photo->privacy == 'private' || $designer_photo->privacy == 'privateOnly'
@@ -101,7 +101,7 @@
                                                         <div class="card-body row">
                                                             <div class="col-10">
                                                                 <a href="{{$designer_photo->getUrl()}}">
-                                                                    <i class="text-info fas fa-eye fa-2x" title="مشاهده عکس"></i></a>
+                                                                    <i class="text-info fas fa-eye fa-2x" title="مشاهده پست"></i></a>
                                                             </div>
                                                             <div class="col-2">
                                                                 <i class=" <?= $designer_photo->privacy == 'private' || $designer_photo->privacy == 'privateOnly'

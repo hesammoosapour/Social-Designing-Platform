@@ -69,7 +69,7 @@ class User extends Authenticatable implements HasMedia
 
     public function userMedia()
     {
-        return $this->morphOne(\App\Models\Media::class, 'modelable');
+        return $this->morphOne(\App\Models\Media::class, 'modelable','model_type','model_id');
     }
 
 }

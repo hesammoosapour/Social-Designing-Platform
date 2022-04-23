@@ -24,11 +24,12 @@ class UploadingDesignPhotosRequest extends FormRequest
     public function rules()
     {
         return [
-            'designer_id' =>  'required','min:1','integer','numeric',
-//            'tag_id'=>'integer','numeric', 'min:1',
+            'designer_id' =>  'required','min:1','numeric',
+//            'tag_id'=>'numeric', 'min:1',
             'tag'=>'nullable','string', 'min:1',
             'set_private_only'=>'nullable','string','max:15',
-            'post_id'=>'integer'
+            'post_id' => 'numeric',
+            'caption' =>'nullable','string', 'max:9999999'
         ];
     }
 }

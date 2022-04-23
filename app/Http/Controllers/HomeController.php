@@ -31,7 +31,8 @@ class HomeController extends Controller
 //todo wherePrivacy('public')
 
 //        return $posts_medias;
-        return view('home',compact('designers','posts_medias'));
+        $user = auth()->user();
+        return view('home',compact('designers','posts_medias','user'));
     }
 
     public function panel()

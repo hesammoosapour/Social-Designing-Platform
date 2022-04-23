@@ -69,8 +69,18 @@ Route::group(['middleware' => ['web']], function () {
             Route::post('create-customer', ['as' => 'create-customer', 'uses' => 'HomeController@createCustomer']);
         });
 
+        //subscriber
+        //todo verified to comment/like
+
+        Route::post('post-comment', ['as' => 'post-comment', 'uses' => 'CommentsController@store']);
+        Route::post('like-the-post', ['as' => 'like-the-post', 'uses' => 'DesignerController@likeThePost']);
+
     });
 //    end auth
+
+
+    //todo guest ?
+
     Route::get('{designer_id}/photos','HomeController@photos')->name('{designer_id}.photos');
 
     Route::post('customer-login','HomeController@customerLogin');
@@ -78,6 +88,9 @@ Route::group(['middleware' => ['web']], function () {
     Route::get('search', ['as' => 'search', 'uses' => 'HomeController@search']);
 
 });
+//end web
+
+
 
 
 

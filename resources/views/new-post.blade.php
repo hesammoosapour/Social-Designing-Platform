@@ -48,11 +48,17 @@
                                 </div>
                                 {!! Form::text('tag',null,['class'=>'form-control']) !!}
                             </div>
+                            <div class="form-group ">
+                                <h5><label for="caption">کپشن:</label></h5>
+                                <textarea name="caption" id="caption" class="form-control"></textarea>
+                            </div>
                             <p>روی جعبه کلیک کنید برای اضافه کردن عکس ها :</p>
 {{--                                                        <input type="file" name="file">--}}
 {{--                                                        <div class="form-group">--}}
 {{--                                                            {!! Form::submit('Create Post',['class'=>'btn btn-primary']) !!}--}}
 {{--                                                        </div>--}}
+
+
                         </form>
                         <hr>
                         <a href="{{route('panel')}}" type="button" class="btn btn-primary">رفتن به پنل</a>

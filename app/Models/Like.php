@@ -6,23 +6,30 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Media extends Model
+class Like extends Model
 {
-    use HasFactory,softDeletes;
+    use HasFactory,SoftDeletes;
     protected $dates = ['deleted_at'];
 
-    protected $fillable = ['privacy','post_id'];
+    protected $fillable = [
+        'user_id' ,
+        'model_type',
+        'model_id' ,
+    ];
 
     public function modelable()
     {
         return $this->morphTo(__FUNCTION__,'model_type','model_id','id');
     }
 
-
-
-    public function post()
+    public function user()
     {
-        return $this->belongsTo('App\Models\Post');
+        return $this->belongsTo('App\Models\User');
+    }
+
+    public function likeable()
+    {
+        return $this->morphTo();
     }
 
 }

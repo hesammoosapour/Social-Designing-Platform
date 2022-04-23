@@ -31,6 +31,8 @@ class AdminController extends Controller
     }
     public function storePost(UploadingDesignPhotosRequest $request ): void
     {
+        Post::find($request->post_id)->update(['caption'=>$request->caption]);
+
         $designer = User::find($request->designer_id);
 
         $designer_photos = $request->file('file');
