@@ -1,3 +1,11 @@
 .rtl {
     direction: rtl;
 }
+.ltr {
+    direction: ltr;
+}
+
+.cbmhp{
+    /* close-btn-modal-home-post */
+    left: -94%;
+}

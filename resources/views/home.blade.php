@@ -21,72 +21,10 @@
     </style>
 
     <style>
-        body {
-            font-family: 'Nunito', sans-serif;
-        }
     </style>
-    <style>
-        .px-12{
-            padding-right: 3rem;
-            padding-left: 3rem;
-        }
-    </style>
-    <style>
-        body {
-            background-color: #eee
-        }
 
-        .card {
-            border: none;
-            border-radius: 10px
-        }
-
-        .c-details span {
-            font-weight: 300;
-            font-size: 13px
-        }
-
-        .icon {
-            width: 50px;
-            height: 50px;
-            background-color: #eee;
-            border-radius: 15px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 39px
-        }
-
-        .badge span {
-            background-color: #fffbec;
-            width: 60px;
-            height: 25px;
-            padding-bottom: 3px;
-            border-radius: 5px;
-            display: flex;
-            color: #fed85d;
-            justify-content: center;
-            align-items: center
-        }
-
-        .progress {
-            height: 10px;
-            border-radius: 10px
-        }
-
-        .progress div {
-            background-color: red
-        }
-
-        .text1 {
-            font-size: 14px;
-            font-weight: 600
-        }
-
-        .text2 {
-            color: #a5aec0
-        }
-    </style>
+    <link rel="stylesheet" href="{{asset('css/home.css')}}">
+    <link rel="stylesheet" href="{{asset('css/style.css')}}">
 
     {{--    <link rel="stylesheet" href="{{asset('css/carousel-styles.css')}}">--}}
     @yield('styles')
@@ -146,15 +84,8 @@
                 <div class="card p-3 mb-2">
                     <div class="d-flex justify-content-between">
                         <div class="d-flex flex-row align-items-center">
-                            <div class="icon"> <i class="bx bxl-mailchimp"></i> </div>
-                            <div class="ms-2 c-details">
-                                <h6 class="mb-0">
-                                    <a href="{{route('{designer_id}.photos',$post_media[0]->model_id)}}"
-                                       class="link-dark"> {{\App\Models\User::find($post_media[0]->model_id)->name}}</a>
-                                </h6>
-                                <span>{{$post_media[0]->created_at}}</span>
-                                {{--                                todo get from post table--}}
-                            </div>
+                            @include('inclusion.home-post-user')
+
                         </div>
                         <div class="badge"> <span>طراحی</span> </div>
                     </div>
@@ -215,30 +146,38 @@
                                 </span>
                                 <div class="row ">
                                     <div class="col-6">
-                                        <a href="post_url">
-                                            <i class="text-info fas fa-eye fa-2x" title="مشاهده پست"></i></a>
+                                        <button  id="{{$post_media[0]->post_id}}" data-bs-toggle="modal"
+                                                 data-bs-target="#post_{{$post_media[0]->post_id}}"
+                                                 aria-disabled="true" class="bg-transparent push" >
+                                            {{--                                            route('post.{id}',$post_media[0]->post_id)  --}}
+                                            {{--                                                    --}}
+                                            <i class="text-info fas fa-eye fa-2x" title="مشاهده پست"></i></button>
                                     </div>
                                     <div class="col-1 offset-1 text-center my-1">
                                         <i class="fa fa-universal-access fa-2x"
                                            aria-hidden="true" title="دسترسی عمومی"></i>
                                     </div>
                                     <div class="col-1 offset-1 text-center my-1">
-                                        <a href="post_url">
+                                        <button id="{{$post_media[0]->post_id}}"
+                                                data-bs-toggle="modal" data-bs-target="#post_{{$post_media[0]->post_id}}"
+                                                aria-disabled="true" class="bg-transparent push" >
                                             <i class="far fa-comment fa-2x" aria-hidden="true" title="یادداشت ها"></i>
-                                        </a>
+                                        </button>
                                     </div>
                                     <div class="col-1 offset-1 text-center">
                                         <?php
-                                        $like_of_post = $post_media[0]->post->likes->where('user_id', $user->id)
-                                            ->where('model_type', 'App\Models\Post')->where('model_id', $post_media[0]->post_id)->first();
+                                        if (isset($user)) {
+                                            $like_of_post = $post_media[0]->post->likes->where('user_id', $user->id)
+                                                ->where('model_type', 'App\Models\Post')->where('model_id', $post_media[0]->post_id)->first();
 
-                                        if ($like_of_post) $like_of_post = true; else $like_of_post = false;
+                                            if ($like_of_post) $like_of_post = true; else $like_of_post = false;
+                                        }
                                         ?>
                                         {!! Form::open(['method'=>'POST','action'=>'DesignerController@likeThePost']) !!}
                                         <input type="hidden" name="post_id" value="{{$post_media[0]->post_id}}">
                                         <button  type="submit" class=" btn " value="">
-                                            <i class="<?= $like_of_post ? 'fa' : 'far'; ?>  fa-heart fa-2x" title="لایک"
-                                               aria-hidden="true" <?= $like_of_post ? 'style="color:red" ' : '' ?>></i>
+                                            <i class="<?php if (isset($like_of_post)) echo  'fa' ; else echo 'far'; ?>  fa-heart fa-2x" title="لایک"
+                                               aria-hidden="true" <?php if (isset($like_of_post))  echo 'style="color:red" '; ?>></i>
                                         </button>
                                         {!! Form::close() !!}
                                     </div>
@@ -256,18 +195,20 @@
                         <div class="cherry-pick-comments">
                             <?php $comments =  $post_media[0]->post->comments ?>
                             @if(isset( $comments[0] ))
-                                    <a href="post_url">
-                                        <h5 class="text-black-50">
+                                <button id="{{$post_media[0]->post_id}}" data-bs-toggle="modal"
+                                        data-bs-target="#post_{{$post_media[0]->post_id}}"
+                                        aria-disabled="true" class="bg-transparent push" >
+                                    <h5 class="text-black-50">
                                         نمایش همه  {{count($post_media[0]->post->comments)}} یادداشت ها :
-                                        </h5>
-                                    </a>
-                                    @foreach($comments as $key_comment => $comment)
-                                        <div class="d-flex">
-                                            <h5><strong>{{$comment->user->name}}: </strong></h5>
-                                            <p>{{$comment->body}}</p>
-                                        </div>
-                                        @php if($key_comment == 1) break; @endphp
-                                    @endforeach
+                                    </h5>
+                                </button>
+                                @foreach($comments as $key_comment => $comment)
+                                    <div class="d-flex">
+                                        <h5><strong>{{$comment->user->name}}: </strong></h5>
+                                        <p>{{$comment->body}}</p>
+                                    </div>
+                                    @php if($key_comment == 1) break; @endphp
+                                @endforeach
                             @endif
 
                         </div>
@@ -293,7 +234,29 @@
                     </div>
                 </div>
 
+
+                <!-- Modal -->
+                <div class="modal fade " id="post_{{$post_media[0]->post_id}}" tabindex="-1" aria-labelledby="post_{{$post_media[0]->post_id}}_Label" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered position-sticky ">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <div class="modal-title" id="post_{{$post_media[0]->post_id}}_Label">
+                                    @include('inclusion.home-post-user')
+                                </div>
+                                <button type="button" class="btn-close position-relative cbmhp"
+                                        data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+
+                            </div>
+                            <div class="modal-footer">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
             @endforeach
+
 
         </div>
     </div>
@@ -328,5 +291,54 @@
     })
 
 </script>
+<script>
+
+    $(document).ready(function() {
+
+        $('.push').click (function () {
+            //
+            var post_id = $(this).attr("id");
+            window.history.pushState('post', 'Title',"/post/" + post_id );
+            //         // event.preventDefault();
+            //
+
+            $.ajax({
+                url: "/get-post-content/" + post_id,
+                method: "GET",
+                dataType: "JSON",
+                data: {
+                    'post_id': post_id
+                },
+                success: function (response) {
+                    if (response.status == 'ok') {
+                        let comments = response.comments;
+                        $('div.modal-body').empty();
+                        comments.forEach((comment) => {
+                            $('div.modal-body').append(
+                                '<div class="d-flex">'
+                                + '<div class="icon"> <i class="bx bxl-mailchimp"></i> </div>' +
+                                    '<h5><strong>'+ comment.name +':</strong></h5>&nbsp'
+                               + comment.body + '<br>' +
+                                '</div>');
+
+                        });
+
+                    }
+                },
+            });
+
+        });
+
+        $('.btn-close').click(function () {
+            window.history.pushState('home', 'Title',"/");
+            $('div.modal-body').empty();
+        });
+
+        $('.modal').on('hidden.bs.modal', function () {
+            window.history.pushState('home', 'Title', "/");
+        });
+    });
+</script>
+
 </body>
 </html>

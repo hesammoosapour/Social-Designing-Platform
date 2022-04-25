@@ -140,4 +140,10 @@ class HomeController extends Controller
         return view('search-results', compact('tag_search', 'designer_search',
             'designers','searched'));
     }
+
+    public function post()
+    {
+        return view('post');
+    }
+
 }

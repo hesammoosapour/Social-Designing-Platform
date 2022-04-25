@@ -87,6 +87,11 @@ Route::group(['middleware' => ['web']], function () {
 
     Route::get('search', ['as' => 'search', 'uses' => 'HomeController@search']);
 
+    //maybe later uuid
+    Route::get('post/{id}', ['as' => 'post.{id}', 'uses' => 'HomeController@post']);
+
+    Route::get('get-post-content/{post_id}','AjaxController@getPostContent');
+
 });
 //end web
 
