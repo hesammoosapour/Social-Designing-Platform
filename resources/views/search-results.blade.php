@@ -256,7 +256,7 @@
                         <div class="single_advisor_profile wow fadeInUp" data-wow-delay="0.2s" style="visibility: visible; animation-delay: 0.2s; animation-name: fadeInUp;">
                             <!-- Team Thumb-->
                             <div class="advisor_thumb">
-                                <a href="{{route('{designer_id}.photos',$item->id)}}">
+                                <a href="{{route('{username}',$item->username)}}">
                                     <img src="https://bootdey.com/img/Content/avatar/avatar5.png" alt="">
                                 </a>
                                 <!-- Social Info-->
@@ -267,7 +267,7 @@
                                 </div>
                             </div>
                             <div class="single_advisor_details_info">
-                                <a href="{{route('{designer_id}.photos',$item->id)}}">
+                                <a href="{{route('{username}',$item->username)}}">
                                     <h6>{{$item->name}}</h6>
                                     <p class="designation">طراح</p>
                                 </a>

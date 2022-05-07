@@ -9,17 +9,18 @@ use App\Http\Controllers\Auth\PasswordResetLinkController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\Auth\VerifyEmailController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\HomeController;
 
-Route::get('/register', [RegisteredUserController::class, 'create'])
-                ->middleware('guest')
-                ->name('register');
+//Route::get('/register', [RegisteredUserController::class, 'create'])
+//                ->middleware('guest')
+//                ->name('register');
 
 Route::post('/register', [RegisteredUserController::class, 'store'])
                 ->middleware('guest');
 
-Route::get('/login', [AuthenticatedSessionController::class, 'create'])
-                ->middleware('guest')
-                ->name('login');
+//Route::get('/login', [AuthenticatedSessionController::class, 'create'])
+//                ->middleware('guest')
+//                ->name('login');
 
 Route::post('/login', [AuthenticatedSessionController::class, 'store'])
                 ->middleware('guest');
@@ -62,3 +63,19 @@ Route::post('/confirm-password', [ConfirmablePasswordController::class, 'store']
 Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])
                 ->middleware('auth')
                 ->name('logout');
+
+Route::group(['middleware'=>['guest']], function (){
+
+    Route::get('/sign-in', [HomeController::class, 'signIn'])
+        ->middleware('guest')
+        ->name('sign-in');
+
+    Route::get('register',function (){
+       return redirect('sign-in');
+    })->name('register');
+
+    Route::get('login',function (){
+       return redirect('sign-in');
+    })->name('login');
+
+});

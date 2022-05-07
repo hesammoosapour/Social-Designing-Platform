@@ -35,6 +35,10 @@ Route::get('/dashboard', function () {
 
 require __DIR__.'/auth.php';
 
+//test
+//Route::get('test',function (){
+//    return view('test');
+//});
 
 Route::group(['middleware' => ['web']], function () {
     Route::get('/', ['as' => '.', 'uses' => 'HomeController@index']);
@@ -45,24 +49,35 @@ Route::group(['middleware' => ['web']], function () {
 
     Route::group(['middleware'=>['auth']], function (){
 
+        //Admin
         Route::group(['middleware'=>['role:Admin']], function (){
 
-//            Route::post('design/newPost','AdminController@newPost');
+            Route::get('{uuid}/change-privacy','HomeController@changePrivacy')
+                ->name('{uuid}.change-privacy');
+
+            //            Route::post('design/newPost','AdminController@newPost');
 
             Route::get('create-post', ['as' => 'create-post', 'uses' => 'AdminController@createPost']);
 
-            Route::get('post/{id}/new', ['as' => 'post.{id}.new',
+            Route::get('/post/{id}/new', ['as' => 'post.{id}.new',
                 'uses' => 'AdminController@newPost']);
-            Route::post('post/{id}/new', ['as' => 'post.{id}.new',
+            Route::post('/post/{id}/new', ['as' => 'post.{id}.new',
                 'uses' => 'AdminController@storePost']);
+
+            Route::get('admin', ['as' => 'admin', 'uses' => 'AdminController@index']);
+
+            Route::get('admin/users', ['as' => 'admin.users', 'uses' => 'AdminController@users']);
+
+            Route::get('admin/{username}', ['as' => 'admin.{username}', 'uses' => 'AdminController@userEdit']);
+
+            Route::patch('admin/{username}/update', ['as' => 'admin.{username}.update', 'uses' => 'AdminController@userUpdate']);
 
 
         });
 
+//        Designer|Admin
         Route::group(['middleware'=>['role:Designer|Admin']], function (){
 
-            Route::get('{uuid}/change-privacy','HomeController@changePrivacy')
-                ->name('{uuid}.change-privacy');
 
             Route::get('customers', ['as' => 'customers', 'uses' => 'HomeController@customers']);
 
@@ -78,10 +93,9 @@ Route::group(['middleware' => ['web']], function () {
     });
 //    end auth
 
-
     //todo guest ?
 
-    Route::get('{designer_id}/photos','HomeController@photos')->name('{designer_id}.photos');
+    Route::get('{username}','HomeController@profile')->name('{username}');
 
     Route::post('customer-login','HomeController@customerLogin');
 

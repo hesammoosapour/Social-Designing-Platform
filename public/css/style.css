@@ -7,5 +7,11 @@
 
 .cbmhp{
     /* close-btn-modal-home-post */
-    left: -94%;
+    left: -30%;
+}
+.w-90 {
+    width: 90%;
+}
+#searchbar {
+    margin-right: 10%;
 }

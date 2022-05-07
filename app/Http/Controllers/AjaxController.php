@@ -12,7 +12,6 @@ class AjaxController extends Controller
          $comments = Comment::where('post_id',$post_id)->select('body','users.name')
             ->join('users', 'users.id' ,'=','comments.commenter_id')->get();
 
-
         return \response()->json(['status'=>'ok','comments'=>$comments]);
 
     }

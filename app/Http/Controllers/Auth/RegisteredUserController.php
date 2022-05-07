@@ -38,12 +38,25 @@ class RegisteredUserController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
+            'phone' => 'required|min:10|max:11|regex:/^([0-9\s\-\+\(\)]*)$/',
+            'username'=>'required|unique:users|string|max:40|regex:/^[a-zA-Z0-9 ]+$/'
         ]);
+        if (strlen($request->phone) >= 12) {
+            return back()->withInput()->withErrors('شماره همراه حداکثر 11 رقم است.');
+        }
+
+        if (strlen($request->phone) == 11) {
+            if (substr($request->phone, 0, 1) != 0 ) {
+               return back()->withInput()->withErrors('شماره همراه اشتباه است.');
+            }
+        }
 
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
+            'phone' => $request->phone,
+            'username'=>$request->username,
         ]);
 
         // assign role Subscriber to new user

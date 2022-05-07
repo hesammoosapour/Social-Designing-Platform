@@ -54,9 +54,9 @@ class CommentsController extends Controller
     {
         $user = Auth::user();
         $data = [
-            'post_id' =>$request->post_id,
+            'post_id' => $request->post_id,
             'body' => $request->body,
-            'commenter_id'=> $user->id,
+            'commenter_id' => $user->id,
         ];
         Comment::create($data);
 //        $request->session()->flash('comment_message','Your comment has been sent and is waiting moderation');

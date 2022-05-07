@@ -18,6 +18,11 @@ use Inertia\Inertia;
 
 class HomeController extends Controller
 {
+    public function signIn()
+    {
+        return view('sign-in');
+    }
+
     public function index()
     {
         $designers = User::role('Designer')->get();
@@ -39,11 +44,15 @@ class HomeController extends Controller
     {
         $user = auth()->user();
 
-//        get photos
-        $design_photos =  $user->getMedia('Design');
+//        get designer's posts
+        $designer_posts_medias = Media::whereModel_id($user->id)->where(function ($q) {
+            return $q->whereNotNull('deleted_at')
+                ->orWhereNotNull('post_id');
+        })
+            ->get(['file_name','post_id','id','created_at','model_id'])->groupBy('post_id');
 
         $designers = User::role('Designer')->get();
-        return view('panel',compact('user','designers','design_photos'));
+        return view('panel',compact('user','designers','designer_posts_medias'));
     }
 
     public function changePrivacy()
@@ -98,17 +107,16 @@ class HomeController extends Controller
         return back();
     }
 
-    public function photos()
+    public function profile()
     {
         $user = auth()->user();
-        $designer_id = Str::after(url()->current(), env('APP_URL') . '/');
-        $designer_id = Str::before($designer_id, '/photos');
+        $profile_username = Str::after(url()->current(), env('APP_URL') . '/');
 
-        $designer = User::find($designer_id);
+        $designer = User::whereUsername($profile_username)->first();
 
         $designer_photos = $designer->getMedia('Design');
 
-        return view('photos', compact('designer','designer_photos','user'));
+        return view('profile', compact('designer','designer_photos','user'));
     }
 
     public function customerLogin(CustomerLoginRequest $request)

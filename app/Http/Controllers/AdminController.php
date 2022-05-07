@@ -3,13 +3,17 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\UploadingDesignPhotosRequest;
+use App\Http\Requests\UserEditRequest;
 use App\Models\MediaTag;
 use App\Models\Post;
-use App\Models\tag;
+use App\Models\Tag;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Str;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
+use Spatie\Permission\Models\Role;
 
 class AdminController extends Controller
 {
@@ -43,13 +47,20 @@ class AdminController extends Controller
             \App\Models\Media::find($media->id)->update(['privacy' => 'privateOnly']);
         }
 
-        $tags = explode('،', $request->tag);
-        foreach ($tags as $tag) {
+        \App\Models\Media::find($media->id)->update(['post_id' => $request->post_id]);
+
+        $tags_for_explosion =  explode('،', $request->tag);
+        foreach ($tags_for_explosion as $tag) {
+
+            $tagsExploded[] = preg_split('/[\s,-]+/', $tag);
+        }
+        $tagsExploded = Arr::flatten($tagsExploded);
+        foreach ($tagsExploded as $tag) {
             $tags_inserted = Tag::firstOrCreate(['name' => $tag]);
             MediaTag::updateOrCreate(['media_id' => $media->id, 'tag_id' => $tags_inserted->id]);
         }
 
-        \App\Models\Media::find($media->id)->update(['post_id' => $request->post_id]);
+
 
     }
 
@@ -58,5 +69,42 @@ class AdminController extends Controller
 //todo route
         // assign role designer to new user
         $user->assignRole('Designer');
+    }
+
+    public function users()
+    {
+        $admin = auth()->user();
+        $users = User::withTrashed()->paginate(15);
+        return view('admin.users',compact('users','admin'));
+    }
+
+    public function userEdit()
+    {
+        $admin = auth()->user();
+        $user_username = Str::after(url()->current(),route('admin') . '/');
+
+        $user = User::whereUsername($user_username)->first();
+
+        $roles_available = Role::where('name','!=','Admin')->pluck('name','id');
+
+        $user_role_id =  $user->roles->first()->id;
+
+        return view('admin.user-edit',compact('user','admin','roles_available','user_role_id'));
+    }
+
+    public function userUpdate(UserEditRequest $request)
+    {
+        $user_username = Str::after(url()->current(),route('admin') . '/');
+        $user_username = Str::before($user_username, '/update');
+        $user = User::whereUsername($user_username)->first();
+
+// get first role if only user can 1 role at same the time.
+        $user->roles->first()->pivot->update(['role_id'=>$request->role_id]);
+
+        $data = ['name' => $request->name, 'username' => $request->username];
+        if ($user->update($data)) {
+            Session::flash('updated_user', 'با موفقیت کاربر آپدیت شد.');
+        }
+        return back();
     }
 }

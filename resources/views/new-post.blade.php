@@ -21,8 +21,9 @@
                         <a href="{{route('create-post')}}" type="button" class="btn btn-primary">پست جدید</a>
 
                         <h5>حداکثر تعداد آپلود: 100</h5>
-                        <form action="/post/{{$post_id}}/new" method="post" class="dropzone"
+                        <form action="{{route('post.{id}.new',$post_id)}}" method="post" class="dropzone"
                               multiple="multiple" enctype="multipart/form-data">
+
                             @csrf
                             <div class="row">
                                 <div class="d-flex form-group col-5 offset-4 ">
@@ -53,7 +54,7 @@
                                 <textarea name="caption" id="caption" class="form-control"></textarea>
                             </div>
                             <p>روی جعبه کلیک کنید برای اضافه کردن عکس ها :</p>
-{{--                                                        <input type="file" name="file">--}}
+{{--                                                        <input type="file" name="file" multiple="multiple">--}}
 {{--                                                        <div class="form-group">--}}
 {{--                                                            {!! Form::submit('Create Post',['class'=>'btn btn-primary']) !!}--}}
 {{--                                                        </div>--}}
