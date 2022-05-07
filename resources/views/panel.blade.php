@@ -277,5 +277,8 @@
 
     @section('scripts')
         <script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/4.3.0/min/dropzone.min.js"  ></script>
+
+        @include('inclusion.carousel.js')
+        @include('inclusion.post-content.panel-js')
     @stop
 </x-app-layout>
